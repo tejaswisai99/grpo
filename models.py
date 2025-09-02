@@ -1,125 +1,67 @@
-from enum import Enum, IntEnum
-from typing import List, Literal, Optional, Union
+from __future__ import annotations
+from typing import List, Dict, Any
+from pydantic import BaseModel, Field, ValidationError
 
-from pydantic import BaseModel
-from pydantic.fields import Field
-
-###Basic schemas
-
-class ActionType(str, Enum):
-    CLICK = "CLICK"
-    TYPE = "TYPE"
-    GOTO_URL = "GOTO_URL"
-    ENTER_TEXT_AND_CLICK = "ENTER_TEXT"
-    SOLVE_CAPTCHA = "SOLVE_CAPTCHA"
+class AvailableActions(BaseModel):
+    clickables: List[str] = Field(default_factory=list)
+    has_search_bar: bool
 
 
-class ClickAction(BaseModel):
-    type: Literal[ActionType.CLICK] = Field(
-        description="""Executes a click action on the element matching the given mmid attribute value. MMID is always a number. Returns Success if click was successful or appropriate error message if the element could not be clicked."""
-    )
-    mmid: int = Field(
-        description="The mmid number of the element that needs to be clicked e.g. 114. mmid will always be a number"
-    )
-    wait_before_execution: Optional[float] = Field(
-        description="Optional wait time in seconds before executing the click event logic"
-    )
+class TakeStepResponse(BaseModel):
+    action_taken: str
+    available_actions: AvailableActions
+    done: bool
+    instruction_text: str
+    message: str
+    observation: str
+    url: str
+
+class InitiateGoalResponse(BaseModel):
+    available_actions: AvailableActions
+    instruction_text: str
+    message: str
+    observation: str
+    observation_mode: str
+    session_id: str
+    url: str
 
 
-class TypeAction(BaseModel):
-    type: Literal[ActionType.TYPE] = Field(
-        description="""Single enter given text in the DOM element matching the given mmid attribute value. This will only enter the text and not press enter or anything else.
-   Returns Success if text entry was successful or appropriate error message if text could not be entered."""
-    )
-    mmid: int = Field(
-        description="The mmid number of the element that needs to be clicked e.g. 114. mmid will always be a number"
-    )
-    content: str = Field(
-        description="The text to enter in the element identified by the query_selector."
-    )
 
+# Optional: to carry around context for validation/logging
+class Context(BaseModel):
+    instruction: str
+    observation: str
+    available_actions: AvailableActions
+    history: List[str] = Field(default_factory=list)
 
-class GotoAction(BaseModel):
-    type: Literal[ActionType.GOTO_URL] = Field(
-        description="Opens a specified URL in the web browser instance. Returns url of the new page if successful or appropriate error message if the page could not be opened."
-    )
-    website: str = Field(
-        description="The URL to navigate to. Value must include the protocol (http:// or https://)."
-    )
-    timeout: Optional[float] = Field(
-        description="Additional wait time in seconds after initial load."
-    )
-
-
-class EnterTextAndClickAction(BaseModel):
-    type: Literal[ActionType.ENTER_TEXT_AND_CLICK] = Field(
-        description="""Enters text into a specified element and clicks another element, both identified by their mmid. Ideal for seamless actions like submitting search queries, this integrated approach ensures superior performance over separate text entry and click commands. Successfully completes when both actions are executed without errors, returning True; otherwise, it provides False or an explanatory message of any failure encountered."""
-    )
-    text_element_mmid: int = Field(
-        description="The mmid number of the element where the text will be entered"
-    )
-    text_to_enter: str = Field(
-        description="The text that will be entered into the element specified by text_element_mmid"
-    )
-    click_element_mmid: int = Field(
-        description="The mmid number of the element that will be clicked after text entry."
-    )
-    wait_before_click_execution: Optional[float] = Field(
-        description="Optional wait time in seconds before executing the click event logic"
-    )
-
-
-class SolveCaptcha(BaseModel):
-    type: Literal[ActionType.SOLVE_CAPTCHA] = Field(
-        description="""Solve captcha, enters the solve captcha into a specified element and clicks another element, both identified by their mmid. Ideal for captcha solving ,entering captcha and clicking submit.Successfully completes when all three actions are executed without errors, returning True; otherwise, it provides False or an explanatory message of any failure encountered."""
-    )
-    text_element_mmid: int = Field(
-        description="The mmid number of the element where the captcha will be entered"
-    )
-
-    click_element_mmid: int = Field(
-        description="The mmid number of the element that will be clicked after the catcha entry to submit"
-    )
-
-    wait_before_click_execution: Optional[float] = Field(
-        description="Optional wait time in seconds before executing the click event logic"
-    )
-
-Action = Union[
-    ClickAction,
-    TypeAction,
-    GotoAction,
-    EnterTextAndClickAction,
-    SolveCaptcha,
-    # GetDomTextAction,
-    # GetDomInputsAction,
-    # GetDomAllAction,
-    # GetCurrentUrlAction,
-]
-
-class Task(BaseModel):
-    id: int
-    description: str
-    url: Optional[str]
-    result: Optional[str]
-
-class Action(BaseModel):
-    id: int
-    description: str
-    url: Optional[str]
-    result: Optional[str]
-
-##LLM schemas
-class AgentQBaseInput(BaseModel):
-    objective: str
-    completed_tasks: Optional[List[Task]]
-    current_page_url: str
-    current_page_dom: str
-
-class AgentQBaseOutput(BaseModel):
+# ---------- Output-side models ----------
+class ActionSuggestion(BaseModel):
+    plan: str
     thought: str
-    plan: List[Task]
-    next_task: Optional[Task]
-    next_task_actions: Optional[List[Action]]
-    is_complete: bool
-    final_response: Optional[str]
+    env: str  # "search[...]" OR "click[<ID>]"
+
+class Explanation(BaseModel):
+    expl: str
+
+# ---------- Post-parse environment validations ----------
+def validate_env_constraints(sug: ActionSuggestion, aa: AvailableActions) -> None:
+    """
+    Enforces:
+      - env == search[query] allowed only if has_search_bar is True
+      - env == click[id] must be one of aa.clickables (exact match)
+    Raises ValueError on violation.
+    """
+    e = sug.env.strip()
+    if e.startswith("search[") and e.endswith("]"):
+        if not aa.has_search_bar:
+            raise ValueError("search[...] not allowed: has_search_bar is False.")
+        # query can be empty/any; you can add stricter checks if needed
+        return
+
+    if e.startswith("click[") and e.endswith("]"):
+        target = e[len("click["):-1]
+        if target not in aa.clickables:
+            raise ValueError(f"click target '{target}' not in clickables.")
+        return
+
+    raise ValueError("env must be either search[...] or click[...].")

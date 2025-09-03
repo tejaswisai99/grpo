@@ -3,14 +3,7 @@ import json
 import llm_interactor
 import webshop_interaction
 
-out_file = 'D:/WebShop/baseline_models/data/human_goals.json'
-
-with open(out_file, 'r') as f:
-    data = json.load(f)
-
-goal = data[100]
-
-goal_response = webshop_interaction.initialize_goal(goal)
+goal_response = webshop_interaction.initialize_goal()
 #print(goal_response)
 step_counter = 0
 history_json=[]

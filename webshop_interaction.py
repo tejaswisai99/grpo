@@ -1,4 +1,5 @@
 import json
+import uuid
 
 import requests
 from requests.adapters import HTTPAdapter
@@ -14,10 +15,8 @@ s.mount("http://", HTTPAdapter(pool_connections=100, pool_maxsize=100, max_retri
 s.mount("https://", HTTPAdapter(pool_connections=100, pool_maxsize=100, max_retries=retries))
 
 
-def initialize_goal(goal: str):
-    data = common_body.copy()
-    data['goal'] = goal
-    data['observation_mode'] = "text"
+def initialize_goal():
+    data = {'session_id': '1', 'observation_mode': "text"}
     #print(json.dumps(data))
     response = s.post(common_url+"/start", data=json.dumps(data))
     #print(response.json())

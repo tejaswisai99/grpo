@@ -62,24 +62,25 @@ HARD CONSTRAINTS:
 8) Ensure that the task ends with in 12 steps. Step counter will be provided.
 
 GENERAL GUIDELINES:
-1) Don't always look for the perfect match. Look in the top 10 results returned. 
+1) Look for the closest match. Look in the top results returned, and 1-2 next pages. 
 2) Explore a bit, look at the entire current observation(web page).
 3) Observe the title/description and then choose the best product, best variant and press buy now. 
-4) Sometimes customization options are available. Be careful. 
-5) The end goal is to buy a product always.
+4) Price, color, variant details are sometimes in product page. Don't keep going to last pages. 
+5) Rarely do you find useful product at the end. Come back and search with a different query
+6) The end goal is to buy a product always.
 
 
 DEMONSTRATIONS (FEW-SHOT)
 
-[SHOT 1: No search bar; must click one of provided IDs]
+[SHOT 1: Has search bar; looking for products]
 INSTRUCTION:
-Find women’s sandals under $40.
+i want silver and noise cancelling earbuds
 
 OBSERVATION:
-"Page 1 [SEP] Sandals $35.99 [SEP] Sandals $60.00 [SEP]"
+"WebShop [SEP] Instruction: [SEP] i want silver and noise cancelling earbuds [SEP] Search"
 
 AVAILABLE_ACTIONS:
-{"clickables":["b0demo1","b0demo2","next >"],"has_search_bar":false}
+{"available_actions":{"clickables":["search"],"has_search_bar":true}}
 
 STEP_COUNTER: 
 0
@@ -88,26 +89,26 @@ HISTORY:
 []
 
 OUTPUT:
-{"plan":"Look at listed sandals and open the one priced under $40.","thought":"No search bar is available, so I must click a listed item.","env":"click[b0demo1]"}
+{"plan":"Let's try to search the product, look at the results and choose the best product and click buy now","thought":"search noise cancelling earbuds silver","env":"search[noise cancelling earbuds silver]"}
 
-[SHOT 2: Has search bar; search is allowed]
+[SHOT 2: No search bar; picking an option]
 INSTRUCTION:
-Need rubber sole shoes, women’s 7.5, under $40.
+i want silver and noise cancelling earbuds
 
 OBSERVATION:
-"Results [SEP] Various shoes listed [SEP]"
-
-STEP_COUNTER:
-5
+"Instruction: [SEP] i want silver and noise cancelling earbuds [SEP] Back to Search [SEP] Page 1 (Total results: 50) [SEP] Next > [SEP] B09HV7RM6Z [SEP] Sony WF-1000XM4 True Wireless Noise Canceling in-Ear Headphones (Silver) with Kratos Power Dual Pad Wireless Charger Bundle (2 Items) [SEP] $278.0 [SEP] B09BDTP2S3 [SEP] Sony WF-1000XM4 Noise Canceling Wireless Earbud Headphones - Silver (Renewed) [SEP] $149.99 [SEP] B0844HF4VP [SEP] Sony WF-1000XM3 True Wireless Noise-Canceling Earbud Headphones (Black, USA Warranty) with Hardshell Travel/Storage case and Noise Isolating Memory Foam & Silicone Tips Bundle (3 Items) [SEP] $199.99 [SEP] B0849QHQ1T [SEP] Sony WF-1000XM3 True Wireless Noise-Canceling Earbuds (Silver, USA Warranty) Bundle Earbud mic Headset and Bluetooth USB dongle (3 Items) [SEP] $199.99 [SEP] B071NZSCZZ [SEP] Bluetooth Headphones Headset Neckband by Gladton, Wireless Stereo Headphones Bluetooth Earbuds with Mic, Noise Cancelling Magnetic Sweatproof Sports Earphones for Running, Music, Jogging, Gym - Black [SEP] $25.0 [SEP] B094C4VDJZ [SEP] Sony WF-1000XM4 Industry Leading Noise Canceling Truly Wireless Earbud Headphones with Alexa Built-in, Black [SEP] $278.0 [SEP] B09GJSS5PP [SEP] HUAWEI FreeBuds 4, True Wireless Bluetooth Earbuds, Open-fit Active Noise Cancellation Headphones, 3-Microphone System, Wired Charging Case, Silver [SEP] $148.99 [SEP] B07T81554H [SEP] Sony WF-1000XM3 Industry Leading Noise Canceling Truly Wireless Earbuds Headset/Headphones with AlexaVoice Control And Mic For Phone Call, Black [SEP] $198.0 [SEP] B098SRVLSC [SEP] Wireless Earbuds Active Noise Cancelling Digdiy D10X ANC Bluetooth Earbuds Wireless Earphones Transparency Mode Clear Calls with ENC Wireless Charge 40H Battery Deep Bass and Immersive Sound Headsets [SEP] $49.99 [SEP] B096SBSTFL [SEP] Bose QuietComfort\u00ae Noise Cancelling Earbuds \u2013 True Wireless Earphones, Sandstone, World Class Bluetooth Noise Cancelling Earbuds with Charging Case - Limited Edition [SEP] $219.0"
 
 AVAILABLE_ACTIONS:
-{"clickables":["b0demo3","b0demo4","back to search"],"has_search_bar":true}
+{"available_actions":{"clickables":["b071nzsczz","b07t81554h","b0844hf4vp","b0849qhq1t","b094c4vdjz","b096sbstfl","b098srvlsc","b09bdtp2s3","b09gjss5pp","b09hv7rm6z","back to search","next >"],"has_search_bar":false}}
 
 HISTORY:
-[]
+[{"plan":"Let's try to search the product, look at the results and choose the best product and click buy now","thought":"search noise cancelling earbuds silver","env":"search[noise cancelling earbuds silver]"}]
+
+STEP_COUNTER:
+1
 
 OUTPUT:
-{"plan":"Refine results by issuing a targeted query.","thought":"Search bar is available, so filtering by the user’s constraints is best.","env":"search[women 7.5 rubber sole under 40]"}
+{"plan":"Let's look at the products displayed and choose the best one, and buy","thought":"click[b09gjss5pp] - this product matches the description well","env":"click[b09gjss5pp]"}
 """
 
 USER_PROMPT_ACTION_SUGGESTION = f"""

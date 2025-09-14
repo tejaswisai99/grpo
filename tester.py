@@ -32,7 +32,7 @@ Fill your candidates in this format-
 RETURN JSON. NO extra text. Do not put line breaks and escape characters."""
         llm_plan = llm_interactor.call_llm(llm_interactor.SYSTEM_PROMPT_ACTION_SUGGESTION, user_prompt_suggestion, 0.2)
         llm_json = json.loads(llm_plan)["1"]
-        print(json.dumps(llm_json))
+        #print(json.dumps(llm_json))
         step_response = webshop_interaction.take_step(goal_response['session_id'],llm_json['env'])
         expl_response = llm_interactor.call_llm(llm_interactor.SYSTEM_PROMPT_ACTION_EXPLANATION,
                                                 llm_interactor.USER_PROMPT_ACTION_EXPLANATION.format(

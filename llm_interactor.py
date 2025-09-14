@@ -263,7 +263,7 @@ def call_llm(system_prompt: str, user_prompt: str, temperature=0.7):
     }
     response = requests.post("http://localhost:8001/v1/chat/completions", headers={"Content-Type": "application/json"}, data=json.dumps(payload))
     if response.status_code == 200:
-        print(response.json())
+        #print(response.json())
         return response.json()['choices'][0]['message']['content']
     else:
         return None

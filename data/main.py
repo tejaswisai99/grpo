@@ -22,15 +22,16 @@ def propose_candidates(instr: str, obs: str, avail: dict, history: List[dict], s
     blob = lli.extract_first_json_object(raw)
     return json.loads(blob)
 
-def explain_short(instr: str, prev_obs: str, prev_avail: dict, history: List[dict],
+def explain_short(instr: str, prev_obs: str,
                   plan: str, thought: str, env: str, curr_obs: str) -> str:
     exp = lli.explain_action(
-        call_llm=lli.call_llm,
+        call_llm_fn=lli.call_llm,
         instruction=instr,
-        observation=prev_obs,
-        available_actions=prev_avail,
-        history=history,
-        prev_output={"plan": plan, "thought": thought, "env": env}
+        prev_observation=prev_obs,  # previous page
+        plan=plan,  # full composite so far
+        thought=thought,
+        env=env,
+        current_observation=curr_obs
     )
     return getattr(exp, "expl", None) or (exp.model_dump().get("expl") if hasattr(exp, "model_dump") else "")
 
@@ -195,7 +196,7 @@ def run_many(goals: List[int],
             print(f"[agg] (goal {g} failed) success_rate={succ/total:.3f}")
 
 if __name__ == "__main__":
-    run_many(goals=[0,1,2],
+    run_many(goals=[1000],
              sims_per_root=1024,
              max_steps=12,
              require_reward1=True,

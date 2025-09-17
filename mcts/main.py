@@ -39,19 +39,20 @@ def propose_candidates(instr: str, obs: str, avail: dict, history: List[dict], s
                 picks.append({"plan": "fallback", "thought": "fallback", "env": f"click[{cid}]"})
         return {str(i+1): picks[i] for i in range(min(4, len(picks)))} or {"1":{"plan":"fallback","thought":"fallback","env":"click[back to search]"}}
 
-def explain_short(instr: str, prev_obs: str, prev_avail: dict, history: List[dict],
+def explain_short(instr: str, prev_obs: str,
                   plan: str, thought: str, env: str, curr_obs: str) -> str:
     """
     Call lli.explain_action and return expl string. We give prev page and current page context.
     """
     try:
         exp = lli.explain_action(
-            call_llm=lli.call_llm,
+            call_llm_fn=lli.call_llm,
             instruction=instr,
-            observation=prev_obs,                # previous page
-            available_actions=prev_avail,
-            history=history,                     # full composite so far
-            prev_output={"plan": plan, "thought": thought, "env": env}
+            prev_observation=prev_obs,                # previous page
+            plan=plan,                     # full composite so far
+            thought=thought,
+            env=env,
+            current_observation=curr_obs
         )
         # pydantic DTO or dict
         expl_text = getattr(exp, "expl", None)
@@ -143,4 +144,4 @@ def run_many(goals: List[int], sims_per_root: int = 32, max_steps: int = 12):
             print(f"[agg] (goal {g} failed) success_rate={succ/total:.3f}")
 
 if __name__ == "__main__":
-    run_many(goals=[0,1,2], sims_per_root=16, max_steps=12)
+    run_many(goals=[1000,1001,1002], sims_per_root=16, max_steps=12)

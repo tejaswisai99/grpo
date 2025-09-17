@@ -149,7 +149,7 @@ class MCTSReplay:
 
             try:
                 expl = self.explain_fn(
-                    node.instr, node.obs, node.avail, local_hist_full,
+                    node.instr, node.obs,
                     plan, thought, env, curr_obs
                 ) or ""
             except Exception:

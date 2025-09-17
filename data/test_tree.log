@@ -10,3 +10,4 @@ Traceback (most recent call last):
     best_env = max(root_node.edges.items(), key=lambda kv: kv[1].N)[0]
                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 ValueError: max() iterable argument is empty
+2025-09-18 02:28:36,611 {'goal_idx': 0, 'steps': 3, 'reward': 1.0}

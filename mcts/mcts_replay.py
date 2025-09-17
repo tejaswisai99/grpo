@@ -142,9 +142,7 @@ class MCTSReplay:
             try:
                 expl = self.explain_fn(
                     node.instr,          # instruction
-                    node.obs,            # prev_obs
-                    node.avail,          # prev_avail
-                    local_hist_full,     # full composite history so far
+                    node.obs,            # full composite history so far
                     plan, thought, env,  # chosen triple
                     curr_obs             # current obs after sim step
                 ) or ""

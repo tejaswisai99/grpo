@@ -37,15 +37,14 @@ s.mount("http://", HTTPAdapter(pool_connections=100, pool_maxsize=100, max_retri
 s.mount("https://", HTTPAdapter(pool_connections=100, pool_maxsize=100, max_retries=retries))
 
 SYSTEM_PROMPT_ACTION_SUGGESTION = """You are an agent-policy generator for a web-navigation RL agent (Agent Q style). 
-You must output STRICT JSON **with exactly 4 elements with each element containing exactly three top-level string fields**.:
+You must output STRICT JSON **with exactly three top-level string fields**.:
   - "plan": a brief, high-level plan for the NEXT FEW steps (1–4 steps max).
   - "thought": a concise internal reasoning for THIS step only (1–2 sentences).
   - "env": the concrete environment action for THIS step in EXACT format:
         either  search[<free-text query>]
         or      click[<ELEMENT_ID>]
-These act as four possible candidates/actions we take on the current page, and we will do MCTS on it. So give 4 alternatives for the same state. 
 Your task will be completed only when we buy the product. i.e. "env" is click[buy now].
-          
+
 HARD CONSTRAINTS:
 1) Output MUST be valid JSON, with double-quoted keys and string values. No trailing commas. No markdown. No extra text.
 2) "env" MUST be one of:
@@ -57,7 +56,6 @@ HARD CONSTRAINTS:
 6) Use the "instruction" and "history" to stay on task and avoid repeating failed actions.
 7) Observation is plain text with [SEP] separators between elements; treat it as read-only state.
 8) Ensure that the task ends with in 12 steps. Step counter will be provided.
-9) The OUTPUT MUST contain 4 possible action candidates, not 1, not 2, not 3. Exactly 4
 
 GENERAL GUIDELINES:
 1) Look for the closest match. Look in the top results returned, and 1-2 next pages.
@@ -87,7 +85,7 @@ HISTORY:
 []
 
 OUTPUT:
-{"1": {"plan": "let's try to search the product, look at the results, and then find the suitable product and click buy now", "thought": "let's search 'blink outdoor camera motion detection'", "env": "search[blink outdoor camera motion detection]"},"2": {"plan": "search for the product and find the closest match, and then buy the product to achieve the goal", "thought": "let's try to search for generic camera string without being too specific, search for 'blink outdoor camera kit'", "env": "search[blink outdoor camera kit]"},"3": {"plan": "search for the product, explore for the search results, look at 1-2 products before choosing the final product", "thought": "search for 'blink outdoor camera'", "env": "search[blink outdoor camera]"},"4": {"plan": "search for the product, and buy the first product", "thought": "search for the 'blink door camera kit'", "env": "search[blink door camera kit]"}}
+{"plan": "let's try to search the product, look at the results, and then find the suitable product and click buy now", "thought": "let's search 'blink outdoor camera motion detection'", "env": "search[blink outdoor camera motion detection]"}
 
 [Example-2]
 INSTRUCTION:
@@ -106,7 +104,7 @@ STEP_COUNTER:
 1
 
 OUTPUT:
-{"1": {"plan": "let's choose the best product from the available products, and click buy now", "thought": "Let's click on the B094YKWM5M, it matches the price constraint and looks fitting for user", "env": "click[b094ykwm5m]"},"2": {"plan": "let's explore 1-2 products, ensure everything is according to user's needs and buy it", "thought": "B08M7D6X65 product seems to be matching user's needs, let's click on it", "env": "click[b08m7d6x65]"},"3": {"plan": "from the available products, let's look for key terms like paraben free, dry, damaged etc, and check if it matches requirements and buy it", "thought": "product B07JFLDJQ5 has price under user's constraints, and we can check that", "env": "click[b07jfldjq5]"},"4": {"plan": "let's click on the first product, and click buy now.", "thought": "the first product is B08F2L92SR, click on it.", "env": "click[b08f2l92sr]"}]
+{"plan": "let's choose the best product from the available products, and click buy now", "thought": "Let's click on the B094YKWM5M, it matches the price constraint and looks fitting for user", "env": "click[b094ykwm5m]"}
 
 [Example-3]
 INSTRUCTION:
@@ -126,7 +124,7 @@ STEP_COUNTER:
 2
 
 OUTPUT:
-[{"1": {"plan": "let's pick the appropriate size, and then proceed for buying", "thought": "The user asked for size 7, let's click size 7", "env": "click[7]"},{"2": {"plan": "let's click buy now, we have found the product", "thought": "we are on the product page, click buy", "env": "click[buy now]"},{"3": {"plan": "let's go back and find for a better match from available products list, and choose the product and buy it", "thought": "to go back, we need to click '< prev'", "env": "click[< prev]"},{"4": {"plan": "looking at the description, looks like we found the right product, let's choose right size and buy", "thought": "click size 7", "env": "click[7]"}]
+{"plan": "let's click buy now, we have found the product", "thought": "we are on the product page, click buy", "env": "click[buy now]"},{"3": {"plan": "let's go back and find for a better match from available products list, and choose the product and buy it", "thought": "to go back, we need to click '< prev'", "env": "click[< prev]"}
 """
 
 USER_PROMPT_ACTION_SUGGESTION = f"""
@@ -181,6 +179,7 @@ CURRENT_PAGE (current page):
 {{OBSERVATION}}
 """
 
+
 def call_llm(system_prompt: str, user_prompt: str, temperature: float = 0.7) -> str:
     payload = {
         "model": "gpt-oss-20b",
@@ -193,7 +192,6 @@ def call_llm(system_prompt: str, user_prompt: str, temperature: float = 0.7) -> 
         "response_format": {"type": "json_object"},
         "stream": False
     }
-    #print("LLM Prompt: {}",user_prompt)
     resp = s.post("http://localhost:8001/v1/chat/completions", data=json.dumps(payload))
     if resp.status_code != 200:
         raise RuntimeError(f"LLM call failed: {resp.status_code} {resp.text[:200]}")
@@ -271,6 +269,6 @@ def USER_PROPMPT_FOR_SUGGESTION(
     tail = """
 OUTPUT FORMAT:
 Fill your candidates in this format-
-{"1": {"plan": "string","thought": "string","env": "string},"2": {"plan": "string","thought": "string","env": "string},"3": {"plan": "string","thought": "string","env": "string},"4": {"plan": "string","thought": "string","env": "string}} 
+{"plan": "string","thought": "string","env": "string}
 RETURN JSON. NO extra text. Do not put line breaks and escape characters."""
     return base + tail

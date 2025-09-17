@@ -7,3 +7,5 @@ step 3 :: chose click[buy now] | root_edges={'click[buy now]': {'N': 13, 'Q': 1.
 TERMINATED: reward=1.000
 [saved] trajs/goal_1000.json
 [agg] success_rate=1.000
+
+.\llama-server.exe -m "D:\llama-models\Qwen_Qwen3-4B-Instruct-2507-Q6_K.gguf" --alias qwen --n-gpu-layers 999 --threads 12 --reasoning-format none --host 0.0.0.0 --port 8001 --ctx-size 8000

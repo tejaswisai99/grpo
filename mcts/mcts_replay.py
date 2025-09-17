@@ -6,12 +6,8 @@ import hashlib, math
 
 import webshop_interaction as ws
 
-# Proposer: given instruction, observation, avail, full composite history, step_t
-# returns dict {"1": {"plan","thought","env"}, ...}
 ProposeFn = Callable[[str, str, dict, List[dict], int], Dict[str, dict]]
 
-# Explainer: given (instruction, prev_obs, prev_avail, history, plan, thought, env, curr_obs)
-# returns a short explanation string
 ExplainFn = Callable[[str, str, dict, List[dict], str, str, str, str], str]
 
 def _hash_key(goal_idx: int, url: str, step_t: int) -> str:

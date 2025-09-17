@@ -1,0 +1,12 @@
+2025-09-18 02:22:54,396 {'goal_idx': 0, 'error': 'max() iterable argument is empty'}
+Traceback (most recent call last):
+  File "D:\iisc_project\grpo\data\main.py", line 186, in run_many
+    path_depth_cap=path_depth_cap,
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\iisc_project\grpo\data\main.py", line 86, in run_one_goal
+    # Build training frame for this root decision
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\iisc_project\grpo\data\mcts_replay.py", line 322, in plan_at_root
+    best_env = max(root_node.edges.items(), key=lambda kv: kv[1].N)[0]
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: max() iterable argument is empty

@@ -1,4 +1,6 @@
 # mcts_replay.py
+
+##Q is the emprirical
 from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Dict, List, Tuple, Callable, Any, Optional
@@ -50,11 +52,12 @@ class Rollout:
 
 class MCTSReplay:
     """
-    PUCT MCTS with stateless replays.
-    - Each node stores 4-tuple actions (plan, thought, env, expl).
-    - During expansion we simulate next state and compute expl, so actions are complete.
-    - We harvest multiple terminal trajectories under a configurable stopping policy (for GRPO).
-    - Hard safety cap on total node count to avoid runaway trees.
+    PUCT-like MCTS with stateless replays and full 4-tuple actions.
+    - Propose (plan,thought,env), simulate next state, then call explainer -> store (plan,thought,env,expl).
+    - During sims we pass ONLY envs to ws.replay, but history we maintain is full 4-tuples.
+    - Fast-path: if any terminal rollout with reward == 1.0 is found at this root, select its FIRST action.
+    - Fallback: otherwise, stop when high-quality path quota met OR caps hit.
+    - Logs UCT = Q + c_exp * sqrt(log N(parent) / (1+N(child))) at root and in node dump.
     """
     def __init__(
         self,
@@ -70,13 +73,14 @@ class MCTSReplay:
         path_depth_cap: int = 8,
         # Safety cap on total nodes
         max_nodes_per_tree: int = 32,
+        uct_c_exp: float = 1.0,   # Agent-Q exploration constant for UCT logging
     ):
         self.propose_fn = propose_fn
         self.explain_fn = explain_fn
         self.c_puct = float(c_puct)
         self.sims = int(sims_per_root)
         self.max_depth = int(max_depth)
-
+        self.uct_c_exp = float(uct_c_exp)
         self.require_reward1 = bool(require_reward1)
         self.target_high_paths = int(target_high_paths)
         self.min_reward = float(min_reward)
@@ -240,23 +244,31 @@ class MCTSReplay:
         sims_done = 0
 
         # Helper to check early-stop condition
-        def should_stop() -> bool:
-            # Respect hard node cap
+        # def should_stop() -> bool:
+        #     # Respect hard node cap
+        #     if len(self.nodes) >= self.max_nodes_per_tree:
+        #         return True
+        #     # Quality condition
+        #     if self.require_reward1:
+        #         if reward1_found and high_paths >= self.target_high_paths:
+        #             return True
+        #     else:
+        #         if high_paths >= self.target_high_paths:
+        #             return True
+        #     return False
+
+        def should_stop_fallback() -> bool:
+            # Fallback policy (used only if reward==1 not yet found)
             if len(self.nodes) >= self.max_nodes_per_tree:
                 return True
-            # Quality condition
-            if self.require_reward1:
-                if reward1_found and high_paths >= self.target_high_paths:
-                    return True
-            else:
-                if high_paths >= self.target_high_paths:
-                    return True
+            if high_paths >= self.target_high_paths:
+                return True
             return False
 
         for _ in range(self.sims):
             sims_done += 1
-            if should_stop():
-                break
+            if reward1_found: break
+            if should_stop_fallback(): break
 
             visited: List[Tuple[Node, str]] = []
             local_prefix_envs = list(prefix_envs)
@@ -313,25 +325,68 @@ class MCTSReplay:
 
         # act with argmax_N from root
         total_N = sum(es.N for es in root_node.edges.values())
-        # enrich debug with P, U, UCB for transparency
+        # If a perfect path was found, prefer its first action from the root
+        preferred_env = None
+        if reward1_found:
+            # pick any (or the "best") reward-1 rollout; here we prefer the shortest
+            best_roll = None
+            for r in self._rollouts.values():
+                if r.terminal and r.reward >= 0.999 and r.length > 0:
+                    if best_roll is None or r.length < best_roll.length:
+                        best_roll = r
+            if best_roll is not None:
+                # first action after the root prefix
+                preferred_env = best_roll.env_path[len(prefix_envs)]
+
+        if preferred_env is not None and preferred_env in root_node.edges:
+            best_env = preferred_env
+            chosen_policy = "reward1_first_action"
+        else:
+            # fallback: your current argmax-N policy (or switch to argmax-UCB/Q if you prefer)
+            best_env = max(root_node.edges.items(), key=lambda kv: kv[1].N)[0]
+            chosen_policy = "argmax_N"
+
+        if preferred_env is None:
+            best_by_reward = {}
+            for r in self._rollouts.values():
+                if r.length > 0:
+                    first = r.env_path[len(prefix_envs)]
+                    best_by_reward[first] = max(best_by_reward.get(first, 0.0), r.reward)
+            if best_by_reward:
+                best_env = max(best_by_reward.items(), key=lambda kv: kv[1])[0]
+                chosen_policy = "argmax_harvested_reward"
+            else:
+                best_env = max(root_node.edges.items(), key=lambda kv: kv[1].N)[0]
+                chosen_policy = "argmax_N"
+
         dbg_edges: Dict[str, Dict[str, float]] = {}
+        log_parent = math.log(max(1, total_N))  # log N(h_t)
         for e, st in root_node.edges.items():
             U = self.c_puct * st.P * math.sqrt(max(1, total_N)) / (1 + st.N)
-            dbg_edges[e] = {"N": st.N, "Q": (0.0 if st.N == 0 else st.W / st.N), "P": st.P, "U": U, "UCB": (0.0 if st.N == 0 else st.W / st.N) + U}
+            Q = 0.0 if st.N == 0 else st.W / st.N
+            UCT = Q + self.uct_c_exp * math.sqrt(log_parent / (1 + st.N))
+            dbg_edges[e] = {"N": st.N, "Q": Q, "P": st.P, "U": U, "UCB": Q + U, "UCT": UCT}
 
-        best_env = max(root_node.edges.items(), key=lambda kv: kv[1].N)[0]
+        # find the full 4-tuple for the selected env at the root
+        chosen_action = next((a for a in root_node.actions if a.get("env") == best_env), None)
+
+
+
         debug = {
-            "root_candidates": root_node.actions,  # full 4-tuples
+            "root_candidates": root_node.actions,
             "root_edges": dbg_edges,
             "root_total_N": total_N,
             "c_puct": self.c_puct,
             "root_url": root_node.url,
             "sims_done": sims_done,
             "paths_found": len(self._rollouts),
-            "good_paths": sum(1 for r in self._rollouts.values() if r.terminal and r.reward >= self.min_reward and r.length <= self.path_depth_cap),
+            "good_paths": sum(1 for r in self._rollouts.values()
+                              if r.terminal and r.reward >= self.min_reward and r.length <= self.path_depth_cap),
             "reward1_found": reward1_found,
             "node_count": len(self.nodes),
             "node_cap": self.max_nodes_per_tree,
+            "chosen_policy": chosen_policy,
+            "chosen_action": chosen_action  # <-- full {plan, thought, env, expl}
         }
         return best_env, debug
 
@@ -355,10 +410,23 @@ class MCTSReplay:
     def export_node_scores(self) -> Dict[str, Dict[str, Any]]:
         dump: Dict[str, Dict[str, Any]] = {}
         for k, n in self.nodes.items():
+            N_parent = sum(es.N for es in n.edges.values())
+            log_parent = math.log(max(1, N_parent))
+            edges_dump = {}
+            for env, es in n.edges.items():
+                Q = 0.0 if es.N == 0 else es.W / es.N
+                UCT = Q + self.uct_c_exp * math.sqrt(log_parent / (1 + es.N))
+                edges_dump[env] = {
+                    "N": es.N,
+                    "W": es.W,
+                    "Q": Q,
+                    "P": es.P,
+                    "UCT": UCT
+                }
             dump[k] = {
                 "url": n.url,
                 "step_t": n.step_t,
-                "edges": {env: {"N": es.N, "W": es.W, "Q": (0.0 if es.N == 0 else es.W/es.N), "P": es.P} for env, es in n.edges.items()},
-                "actions": n.actions,  # 4-tuples at this node
+                "edges": edges_dump,
+                "actions": n.actions,
             }
         return dump

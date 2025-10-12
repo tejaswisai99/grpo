@@ -34,7 +34,7 @@ from typing import Any, Dict, List, Optional, Tuple
 
 # --------- CONSTANTS: Edit if needed ---------
 
-SYSTEM_PROMPT = """You are an agent-policy generator for a web-navigation RL agent (Agent Q style).
+SYSTEM_PROMPT  = f"""You are an agent-policy generator for a web-navigation RL agent (Agent Q style).
 You must output STRICT JSON with exactly **one object** containing exactly three top-level string fields:
   - "plan": a brief, high-level plan for the NEXT FEW steps (1–2 steps max).
   - "thought": a concise internal reasoning for THIS step only (1–2 sentences).
@@ -57,7 +57,7 @@ HARD CONSTRAINTS:
 8) Ensure that the task ends within 12 steps. Step counter will be provided.
 
 GENERAL GUIDELINES:
-1) Look for the closest match. Look in the top results returned, and 1–2 next pages.
+1) Look for the closest match. Look in the top results returned, and 1-2 next pages.
 2) It's always better not to include price constraint in search, as it uses lucene indexer and price is not part of it while building the index.
 3) Explore a bit, look at the entire current observation (web page).
 4) Observe the title/description and then choose the best product, best variant and press buy now.
@@ -66,7 +66,9 @@ GENERAL GUIDELINES:
 7) The end goal is always to buy a product.
 """
 
-USER_TEMPLATE = """INSTRUCTION:
+
+USER_TEMPLATE  = """
+INSTRUCTION:
 {INSTRUCTION}
 
 OBSERVATION (Current web page): 
@@ -82,11 +84,11 @@ STEP_COUNTER (NUMBER OF STEPS COMPLETE):
 {STEP_COUNTER}
 """
 
-TAIL = """OUTPUT FORMAT:
+TAIL  = """
+OUTPUT FORMAT:
 Fill your candidates in this format-
 {"plan": "string","thought": "string","env": "string}
 RETURN JSON. NO extra text. Do not put line breaks and escape characters."""
-# ---------------------------------------------
 
 def read_jsonl(path: Path):
     with path.open("r", encoding="utf-8") as f:

@@ -1,0 +1,853 @@
+{
+  "goal_idx": 1,
+  "status": "success",
+  "error": null,
+  "final_reward": 1.0,
+  "steps": 3,
+  "frames": [
+    {
+      "step": 0,
+      "instruction": "Instruction: i want a noise cancelling cosycost usb microphone, and price lower than 50.00 dollars",
+      "observation": "WebShop [SEP] Instruction: [SEP] i want a noise cancelling cosycost usb microphone, and price lower than 50.00 dollars [SEP] Search",
+      "available_actions": {
+        "clickables": [
+          "search"
+        ],
+        "has_search_bar": true
+      },
+      "history_tuples": [],
+      "proposed": {
+        "c_puct": 1.2,
+        "total_N": null,
+        "candidates": []
+      },
+      "harvested_rollouts": [
+        {
+          "instruction": "Instruction: i want a noise cancelling cosycost usb microphone, and price lower than 50.00 dollars",
+          "actions": [
+            {
+              "plan": "search for the product using the exact query to find relevant results",
+              "thought": "perform a search for 'noise cancelling cosycost usb microphone' to locate matching products",
+              "env": "search[noise cancelling cosycost usb microphone]",
+              "expl": "I performed a search for 'noise cancelling cosycost usb microphone' to find products matching the user's request for a noise-cancelling USB microphone from Cosycost under $50.00."
+            },
+            {
+              "plan": "evaluate the products listed, select the one that matches 'noise cancelling cosycost usb microphone' and is under $50.00, then click buy now",
+              "thought": "B0972Q1T8T matches the product name and is within price limit",
+              "env": "click[b0972q1t8t]",
+              "expl": "I clicked the Cosycost USB microphone because it matched the user's request for a noise-cancelling, USB-powered microphone under $50.00."
+            },
+            {
+              "plan": "confirm the product matches the query and is within price limit, then proceed to buy",
+              "thought": "The product is a noise cancelling Cosycost USB microphone at $32.99, which meets all requirements",
+              "env": "click[buy now]",
+              "expl": "I clicked 'Buy Now' for the noise cancelling Cosycost USB microphone priced at $32.99, which satisfies the user's requirement of being under $50 and matching the product specifications."
+            }
+          ],
+          "env_path": [
+            "search[noise cancelling cosycost usb microphone]",
+            "click[b0972q1t8t]",
+            "click[buy now]"
+          ],
+          "reward": 1.0,
+          "length": 3,
+          "terminal": true
+        }
+      ],
+      "node_count": 4,
+      "node_cap": 40,
+      "sims_done": 1,
+      "paths_found": 1,
+      "good_paths": 1,
+      "reward1_found": true,
+      "chosen_policy": "greedy_reward1"
+    }
+  ],
+  "final_history": [
+    {
+      "plan": "search for the product using the exact query to find relevant results",
+      "thought": "perform a search for 'noise cancelling cosycost usb microphone' to locate matching products",
+      "env": "search[noise cancelling cosycost usb microphone]",
+      "expl": "I performed a search for 'noise cancelling cosycost usb microphone' to find products matching the user's request for a noise-cancelling USB microphone from Cosycost under $50.00."
+    },
+    {
+      "plan": "evaluate the products listed, select the one that matches 'noise cancelling cosycost usb microphone' and is under $50.00, then click buy now",
+      "thought": "B0972Q1T8T matches the product name and is within price limit",
+      "env": "click[b0972q1t8t]",
+      "expl": "I clicked the Cosycost USB microphone because it matched the user's request for a noise-cancelling, USB-powered microphone under $50.00."
+    },
+    {
+      "plan": "confirm the product matches the query and is within price limit, then proceed to buy",
+      "thought": "The product is a noise cancelling Cosycost USB microphone at $32.99, which meets all requirements",
+      "env": "click[buy now]",
+      "expl": "I clicked 'Buy Now' for the noise cancelling Cosycost USB microphone priced at $32.99, which satisfies the user's requirement of being under $50 and matching the product specifications."
+    }
+  ],
+  "final_env_path": [
+    "search[noise cancelling cosycost usb microphone]",
+    "click[b0972q1t8t]",
+    "click[buy now]"
+  ],
+  "final_node_table": {
+    "3439b8f252858e27266106000ebe24e62deef0be96e4febea026086ab24ef881": {
+      "url": "http://127.0.0.1:3000/sim_bnkbvwjukf",
+      "step_t": 0,
+      "edges": {
+        "search[noise cancelling cosycost usb microphone]": {
+          "N": 1,
+          "W": 1.0,
+          "Q": 1.0,
+          "P": 0.3333333333333333,
+          "UCT": 1.0
+        },
+        "search[noise cancelling usb microphone]": {
+          "N": 0,
+          "W": 0.0,
+          "Q": 0.0,
+          "P": 0.3333333333333333,
+          "UCT": 0.0
+        },
+        "search[cosycost usb microphone]": {
+          "N": 0,
+          "W": 0.0,
+          "Q": 0.0,
+          "P": 0.3333333333333333,
+          "UCT": 0.0
+        }
+      },
+      "actions": [
+        {
+          "plan": "search for the product using the exact query to find relevant results",
+          "thought": "perform a search for 'noise cancelling cosycost usb microphone' to locate matching products",
+          "env": "search[noise cancelling cosycost usb microphone]",
+          "expl": "I performed a search for 'noise cancelling cosycost usb microphone' to find products matching the user's request for a noise-cancelling USB microphone from Cosycost under $50.00."
+        },
+        {
+          "plan": "search with a slightly broader term to find more options",
+          "thought": "try searching 'noise cancelling usb microphone' to expand results",
+          "env": "search[noise cancelling usb microphone]",
+          "expl": "I performed a search for 'noise cancelling usb microphone' to find more relevant options that meet the user's requirement of being under $50.00."
+        },
+        {
+          "plan": "search with a more generic term to cover all possible variations",
+          "thought": "search for 'cosycost usb microphone' to find the product regardless of noise cancellation mention",
+          "env": "search[cosycost usb microphone]",
+          "expl": "I searched for 'cosycost usb microphone' to find relevant products, as the exact noise-cancelling feature was not specified, and the search aimed to cover all possible variations within the price limit of $50.00."
+        }
+      ]
+    },
+    "e03d2e5fcf6d943ec2edb1b43162548152172936959a63ddd3609c3eecad21a6": {
+      "url": "http://127.0.0.1:3000/search_results/sim_dchinhhxem/noise+cancelling+cosycost+usb+microphone/1",
+      "step_t": 1,
+      "edges": {
+        "click[b0972q1t8t]": {
+          "N": 1,
+          "W": 1.0,
+          "Q": 1.0,
+          "P": 0.3333333333333333,
+          "UCT": 1.0
+        },
+        "click[b08fmk8xv5]": {
+          "N": 0,
+          "W": 0.0,
+          "Q": 0.0,
+          "P": 0.3333333333333333,
+          "UCT": 0.0
+        },
+        "click[b08gljswj9]": {
+          "N": 0,
+          "W": 0.0,
+          "Q": 0.0,
+          "P": 0.3333333333333333,
+          "UCT": 0.0
+        }
+      },
+      "actions": [
+        {
+          "plan": "evaluate the products listed, select the one that matches 'noise cancelling cosycost usb microphone' and is under $50.00, then click buy now",
+          "thought": "B0972Q1T8T matches the product name and is within price limit",
+          "env": "click[b0972q1t8t]",
+          "expl": "I clicked the Cosycost USB microphone because it matched the user's request for a noise-cancelling, USB-powered microphone under $50.00."
+        },
+        {
+          "plan": "check alternative products that closely match the description and ensure price is under $50.00 before buying",
+          "thought": "B08FMK8XV5 is a close match with noise cancellation and is under $50.00",
+          "env": "click[b08fmk8xv5]",
+          "expl": "I clicked on the B08FMK8XV5 USB headset with noise cancellation as it matched the user's request for a noise-cancelling microphone under $50.00."
+        },
+        {
+          "plan": "verify the product details and proceed to buy the correct one that fits all requirements",
+          "thought": "B08GLJSWJ9 is a noise-cancelling USB headset with mic and is under $50.00, suitable option",
+          "env": "click[b08gljswj9]",
+          "expl": "I clicked on the Jiade USB headset with noise-cancelling microphone because it meets the user's requirement of being a noise-cancelling USB device under $50.00."
+        }
+      ]
+    },
+    "a195c9f7313cf19ab3f47e76f6762aa7cbb703af0b63bd6d6ab7744b27d61dbb": {
+      "url": "http://127.0.0.1:3000/item_page/sim_ueblinhwtp/B0972Q1T8T/noise+cancelling+cosycost+usb+microphone/1/{}",
+      "step_t": 2,
+      "edges": {
+        "click[buy now]": {
+          "N": 1,
+          "W": 1.0,
+          "Q": 1.0,
+          "P": 0.3333333333333333,
+          "UCT": 1.0
+        },
+        "click[description]": {
+          "N": 0,
+          "W": 0.0,
+          "Q": 0.0,
+          "P": 0.3333333333333333,
+          "UCT": 0.0
+        },
+        "click[< prev]": {
+          "N": 0,
+          "W": 0.0,
+          "Q": 0.0,
+          "P": 0.3333333333333333,
+          "UCT": 0.0
+        }
+      },
+      "actions": [
+        {
+          "plan": "confirm the product matches the query and is within price limit, then proceed to buy",
+          "thought": "The product is a noise cancelling Cosycost USB microphone at $32.99, which meets all requirements",
+          "env": "click[buy now]",
+          "expl": "I clicked 'Buy Now' for the noise cancelling Cosycost USB microphone priced at $32.99, which satisfies the user's requirement of being under $50 and matching the product specifications."
+        },
+        {
+          "plan": "verify product details and ensure it's the correct variant before purchasing",
+          "thought": "Product description confirms it's a noise cancelling USB microphone, so it's safe to buy",
+          "env": "click[description]",
+          "expl": "I clicked on the product description to verify it matches the requested noise cancelling USB microphone under $50, ensuring it meets the user's specifications before proceeding with the purchase."
+        },
+        {
+          "plan": "go back to search and look for alternative products if needed, then select and buy",
+          "thought": "To ensure no better option exists, check previous results",
+          "env": "click[< prev]",
+          "expl": "I clicked back to previous page to check for alternative noise-cancelling USB microphones under $50, as the initial result was specific to Cosycost and I wanted to ensure no better option existed."
+        }
+      ]
+    },
+    "cc057b91064ba327ea3e597e46f3e993f61a143e301f660350d2288115e01f58": {
+      "url": "http://127.0.0.1:3000/done/sim_qtwespcsil/B0972Q1T8T/{}",
+      "step_t": 3,
+      "edges": {},
+      "actions": []
+    }
+  },
+  "all_harvested": [
+    {
+      "instruction": "Instruction: i want a noise cancelling cosycost usb microphone, and price lower than 50.00 dollars",
+      "actions": [
+        {
+          "plan": "search for the product using the exact query to find relevant results",
+          "thought": "perform a search for 'noise cancelling cosycost usb microphone' to locate matching products",
+          "env": "search[noise cancelling cosycost usb microphone]",
+          "expl": "I performed a search for 'noise cancelling cosycost usb microphone' to find products matching the user's request for a noise-cancelling USB microphone from Cosycost under $50.00."
+        },
+        {
+          "plan": "evaluate the products listed, select the one that matches 'noise cancelling cosycost usb microphone' and is under $50.00, then click buy now",
+          "thought": "B0972Q1T8T matches the product name and is within price limit",
+          "env": "click[b0972q1t8t]",
+          "expl": "I clicked the Cosycost USB microphone because it matched the user's request for a noise-cancelling, USB-powered microphone under $50.00."
+        },
+        {
+          "plan": "confirm the product matches the query and is within price limit, then proceed to buy",
+          "thought": "The product is a noise cancelling Cosycost USB microphone at $32.99, which meets all requirements",
+          "env": "click[buy now]",
+          "expl": "I clicked 'Buy Now' for the noise cancelling Cosycost USB microphone priced at $32.99, which satisfies the user's requirement of being under $50 and matching the product specifications."
+        }
+      ],
+      "env_path": [
+        "search[noise cancelling cosycost usb microphone]",
+        "click[b0972q1t8t]",
+        "click[buy now]"
+      ],
+      "reward": 1.0,
+      "length": 3,
+      "terminal": true
+    }
+  ],
+  "node_snapshots_winning": [
+    {
+      "state": {
+        "url": "http://127.0.0.1:3000/sim_bnkbvwjukf",
+        "observation": "WebShop [SEP] Instruction: [SEP] i want a noise cancelling cosycost usb microphone, and price lower than 50.00 dollars [SEP] Search"
+      },
+      "actions_available": {
+        "clickables": [
+          "search"
+        ],
+        "has_search_bar": true
+      },
+      "history": [],
+      "children": [
+        {
+          "action": {
+            "plan": "search for the product using the exact query to find relevant results",
+            "thought": "perform a search for 'noise cancelling cosycost usb microphone' to locate matching products",
+            "env": "search[noise cancelling cosycost usb microphone]",
+            "expl": "I performed a search for 'noise cancelling cosycost usb microphone' to find products matching the user's request for a noise-cancelling USB microphone from Cosycost under $50.00."
+          },
+          "stats": {
+            "N": 0,
+            "Q": 0.0,
+            "P": 0.3333333333333333,
+            "U": 0.39999999999999997,
+            "UCB": 0.39999999999999997,
+            "UCT": 0.0
+          }
+        },
+        {
+          "action": {
+            "plan": "search with a slightly broader term to find more options",
+            "thought": "try searching 'noise cancelling usb microphone' to expand results",
+            "env": "search[noise cancelling usb microphone]",
+            "expl": "I performed a search for 'noise cancelling usb microphone' to find more relevant options that meet the user's requirement of being under $50.00."
+          },
+          "stats": {
+            "N": 0,
+            "Q": 0.0,
+            "P": 0.3333333333333333,
+            "U": 0.39999999999999997,
+            "UCB": 0.39999999999999997,
+            "UCT": 0.0
+          }
+        },
+        {
+          "action": {
+            "plan": "search with a more generic term to cover all possible variations",
+            "thought": "search for 'cosycost usb microphone' to find the product regardless of noise cancellation mention",
+            "env": "search[cosycost usb microphone]",
+            "expl": "I searched for 'cosycost usb microphone' to find relevant products, as the exact noise-cancelling feature was not specified, and the search aimed to cover all possible variations within the price limit of $50.00."
+          },
+          "stats": {
+            "N": 0,
+            "Q": 0.0,
+            "P": 0.3333333333333333,
+            "U": 0.39999999999999997,
+            "UCB": 0.39999999999999997,
+            "UCT": 0.0
+          }
+        }
+      ]
+    },
+    {
+      "state": {
+        "url": "http://127.0.0.1:3000/sim_bnkbvwjukf",
+        "observation": "WebShop [SEP] Instruction: [SEP] i want a noise cancelling cosycost usb microphone, and price lower than 50.00 dollars [SEP] Search"
+      },
+      "actions_available": {
+        "clickables": [
+          "search"
+        ],
+        "has_search_bar": true
+      },
+      "history": [],
+      "children": [
+        {
+          "action": {
+            "plan": "search for the product using the exact query to find relevant results",
+            "thought": "perform a search for 'noise cancelling cosycost usb microphone' to locate matching products",
+            "env": "search[noise cancelling cosycost usb microphone]",
+            "expl": "I performed a search for 'noise cancelling cosycost usb microphone' to find products matching the user's request for a noise-cancelling USB microphone from Cosycost under $50.00."
+          },
+          "stats": {
+            "N": 0,
+            "Q": 0.0,
+            "P": 0.3333333333333333,
+            "U": 0.39999999999999997,
+            "UCB": 0.39999999999999997,
+            "UCT": 0.0
+          }
+        },
+        {
+          "action": {
+            "plan": "search with a slightly broader term to find more options",
+            "thought": "try searching 'noise cancelling usb microphone' to expand results",
+            "env": "search[noise cancelling usb microphone]",
+            "expl": "I performed a search for 'noise cancelling usb microphone' to find more relevant options that meet the user's requirement of being under $50.00."
+          },
+          "stats": {
+            "N": 0,
+            "Q": 0.0,
+            "P": 0.3333333333333333,
+            "U": 0.39999999999999997,
+            "UCB": 0.39999999999999997,
+            "UCT": 0.0
+          }
+        },
+        {
+          "action": {
+            "plan": "search with a more generic term to cover all possible variations",
+            "thought": "search for 'cosycost usb microphone' to find the product regardless of noise cancellation mention",
+            "env": "search[cosycost usb microphone]",
+            "expl": "I searched for 'cosycost usb microphone' to find relevant products, as the exact noise-cancelling feature was not specified, and the search aimed to cover all possible variations within the price limit of $50.00."
+          },
+          "stats": {
+            "N": 0,
+            "Q": 0.0,
+            "P": 0.3333333333333333,
+            "U": 0.39999999999999997,
+            "UCB": 0.39999999999999997,
+            "UCT": 0.0
+          }
+        }
+      ]
+    },
+    {
+      "state": {
+        "url": "http://127.0.0.1:3000/search_results/sim_dchinhhxem/noise+cancelling+cosycost+usb+microphone/1",
+        "observation": "Instruction: [SEP] i want a noise cancelling cosycost usb microphone, and price lower than 50.00 dollars [SEP] Back to Search [SEP] Page 1 (Total results: 50) [SEP] Next > [SEP] B0972Q1T8T [SEP] Cosycost USB Microphone,Condenser Computer PC Gaming Microphone for PS4/5 Laptop Windows Mac OS Android Phone,Noise Cancelling Instant Mute,Studio Mic for Voice,Music Recording,Podcasting,Streaming [SEP] $32.99 [SEP] B072L2D6LY [SEP] Andrea Communications NC-255VM USB On-Ear Stereo USB Computer Headset with Noise-Canceling Microphone, in-Line Volume/Mute Controls, and Plug [SEP] $34.59 [SEP] B071H84LTJ [SEP] Andrea Communications NC-455VM USB Over-Ear Circumaural Stereo USB Computer Headset with Noise-Canceling Microphone, in-Line Volume/Mute Controls, and Plug [SEP] $49.24 [SEP] B08GLJSWJ9 [SEP] Jiade USB Headset with Noise Canceling Microphone for CallCenter Skype Chat, Computer Phone Headset Voice Recognition Speech Dictation, PC Headphone with Mic Mute Volume Control Binaural Golden [SEP] $9.99 [SEP] B09M75DDSV [SEP] Yealink Headset with Microphone Teams Certified UH36& WH66 USB-C and Wireless Bluetooth DECT Headphones with Microphone Noise Cancelling Teams Certified Workstation for VoIP Phone Computer PC Laptop [SEP] $331.99 [SEP] B08SGMQYS4 [SEP] EKSA Headset with Microphone for Laptop, Wired USB Computer Headphones with Environmental Noise Cancellation, Lightweight Mute Control, Business Telephone Headset for PC,Skype, Call Center, Office [SEP] $29.95 [SEP] B01M7SHQNO [SEP] USB Headset with Microphone Noise Cancelling & Mic Mute, Mono Computer Headphone for Call Center Office Business PC Softphone Calls Microsoft Teams Skype Chat, Clear Voice for Speech Dictation [SEP] $36.99 [SEP] B08FMK8XV5 [SEP] USB Headset with Microphone Computer Headphone with Noise Cancelling, Corded Monaural H390 Headset Computer Pro Headphones for Business Skype UC Lync Softphone Call Center Office [SEP] $16.75 [SEP] B09KZN3G83 [SEP] USB Headset with Microphone Noise Cancelling for Call Center, Adjustable Boom Mic, Inline Volume Control & Mute, Wired On Ear Computer PC Headphones for Zoom, Web, Skype [SEP] $19.99 [SEP] B085M2ZQ35 [SEP] Lenovo Yoga Active Noise Cancellation Headphones, Wireless On-Ear Headphones, Bluetooth 5.0, 14Hrs Playtime, Microphone, Fold-Flat, Memory Foam Earpads, Carry Case, Win/Mac/Android, GXD0U47643, Mica [SEP] $149.99"
+      },
+      "actions_available": {
+        "clickables": [
+          "b01m7shqno",
+          "b071h84ltj",
+          "b072l2d6ly",
+          "b085m2zq35",
+          "b08fmk8xv5",
+          "b08gljswj9",
+          "b08sgmqys4",
+          "b0972q1t8t",
+          "b09kzn3g83",
+          "b09m75ddsv",
+          "back to search",
+          "next >"
+        ],
+        "has_search_bar": false
+      },
+      "history": [
+        {
+          "plan": "search for the product using the exact query to find relevant results",
+          "thought": "perform a search for 'noise cancelling cosycost usb microphone' to locate matching products",
+          "env": "search[noise cancelling cosycost usb microphone]",
+          "expl": "I performed a search for 'noise cancelling cosycost usb microphone' to find products matching the user's request for a noise-cancelling USB microphone from Cosycost under $50.00."
+        }
+      ],
+      "children": [
+        {
+          "action": {
+            "plan": "evaluate the products listed, select the one that matches 'noise cancelling cosycost usb microphone' and is under $50.00, then click buy now",
+            "thought": "B0972Q1T8T matches the product name and is within price limit",
+            "env": "click[b0972q1t8t]",
+            "expl": "I clicked the Cosycost USB microphone because it matched the user's request for a noise-cancelling, USB-powered microphone under $50.00."
+          },
+          "stats": {
+            "N": 0,
+            "Q": 0.0,
+            "P": 0.3333333333333333,
+            "U": 0.39999999999999997,
+            "UCB": 0.39999999999999997,
+            "UCT": 0.0
+          }
+        },
+        {
+          "action": {
+            "plan": "check alternative products that closely match the description and ensure price is under $50.00 before buying",
+            "thought": "B08FMK8XV5 is a close match with noise cancellation and is under $50.00",
+            "env": "click[b08fmk8xv5]",
+            "expl": "I clicked on the B08FMK8XV5 USB headset with noise cancellation as it matched the user's request for a noise-cancelling microphone under $50.00."
+          },
+          "stats": {
+            "N": 0,
+            "Q": 0.0,
+            "P": 0.3333333333333333,
+            "U": 0.39999999999999997,
+            "UCB": 0.39999999999999997,
+            "UCT": 0.0
+          }
+        },
+        {
+          "action": {
+            "plan": "verify the product details and proceed to buy the correct one that fits all requirements",
+            "thought": "B08GLJSWJ9 is a noise-cancelling USB headset with mic and is under $50.00, suitable option",
+            "env": "click[b08gljswj9]",
+            "expl": "I clicked on the Jiade USB headset with noise-cancelling microphone because it meets the user's requirement of being a noise-cancelling USB device under $50.00."
+          },
+          "stats": {
+            "N": 0,
+            "Q": 0.0,
+            "P": 0.3333333333333333,
+            "U": 0.39999999999999997,
+            "UCB": 0.39999999999999997,
+            "UCT": 0.0
+          }
+        }
+      ]
+    },
+    {
+      "state": {
+        "url": "http://127.0.0.1:3000/item_page/sim_ueblinhwtp/B0972Q1T8T/noise+cancelling+cosycost+usb+microphone/1/{}",
+        "observation": "Instruction: [SEP] i want a noise cancelling cosycost usb microphone, and price lower than 50.00 dollars [SEP] Back to Search [SEP] < Prev [SEP] Cosycost USB Microphone,Condenser Computer PC Gaming Microphone for PS4/5 Laptop Windows Mac OS Android Phone,Noise Cancelling Instant Mute,Studio Mic for Voice,Music Recording,Podcasting,Streaming [SEP] Price: $32.99 [SEP] Rating: N.A. [SEP] Description [SEP] Features [SEP] Reviews [SEP] Buy Now"
+      },
+      "actions_available": {
+        "clickables": [
+          "< prev",
+          "back to search",
+          "buy now",
+          "description",
+          "features",
+          "reviews"
+        ],
+        "has_search_bar": false
+      },
+      "history": [
+        {
+          "plan": "search for the product using the exact query to find relevant results",
+          "thought": "perform a search for 'noise cancelling cosycost usb microphone' to locate matching products",
+          "env": "search[noise cancelling cosycost usb microphone]",
+          "expl": "I performed a search for 'noise cancelling cosycost usb microphone' to find products matching the user's request for a noise-cancelling USB microphone from Cosycost under $50.00."
+        },
+        {
+          "plan": "evaluate the products listed, select the one that matches 'noise cancelling cosycost usb microphone' and is under $50.00, then click buy now",
+          "thought": "B0972Q1T8T matches the product name and is within price limit",
+          "env": "click[b0972q1t8t]",
+          "expl": "I clicked the Cosycost USB microphone because it matched the user's request for a noise-cancelling, USB-powered microphone under $50.00."
+        }
+      ],
+      "children": [
+        {
+          "action": {
+            "plan": "confirm the product matches the query and is within price limit, then proceed to buy",
+            "thought": "The product is a noise cancelling Cosycost USB microphone at $32.99, which meets all requirements",
+            "env": "click[buy now]",
+            "expl": "I clicked 'Buy Now' for the noise cancelling Cosycost USB microphone priced at $32.99, which satisfies the user's requirement of being under $50 and matching the product specifications."
+          },
+          "stats": {
+            "N": 0,
+            "Q": 0.0,
+            "P": 0.3333333333333333,
+            "U": 0.39999999999999997,
+            "UCB": 0.39999999999999997,
+            "UCT": 0.0
+          }
+        },
+        {
+          "action": {
+            "plan": "verify product details and ensure it's the correct variant before purchasing",
+            "thought": "Product description confirms it's a noise cancelling USB microphone, so it's safe to buy",
+            "env": "click[description]",
+            "expl": "I clicked on the product description to verify it matches the requested noise cancelling USB microphone under $50, ensuring it meets the user's specifications before proceeding with the purchase."
+          },
+          "stats": {
+            "N": 0,
+            "Q": 0.0,
+            "P": 0.3333333333333333,
+            "U": 0.39999999999999997,
+            "UCB": 0.39999999999999997,
+            "UCT": 0.0
+          }
+        },
+        {
+          "action": {
+            "plan": "go back to search and look for alternative products if needed, then select and buy",
+            "thought": "To ensure no better option exists, check previous results",
+            "env": "click[< prev]",
+            "expl": "I clicked back to previous page to check for alternative noise-cancelling USB microphones under $50, as the initial result was specific to Cosycost and I wanted to ensure no better option existed."
+          },
+          "stats": {
+            "N": 0,
+            "Q": 0.0,
+            "P": 0.3333333333333333,
+            "U": 0.39999999999999997,
+            "UCB": 0.39999999999999997,
+            "UCT": 0.0
+          }
+        }
+      ]
+    }
+  ],
+  "node_snapshots_all": [
+    {
+      "state": {
+        "url": "http://127.0.0.1:3000/sim_bnkbvwjukf",
+        "observation": "WebShop [SEP] Instruction: [SEP] i want a noise cancelling cosycost usb microphone, and price lower than 50.00 dollars [SEP] Search"
+      },
+      "actions_available": {
+        "clickables": [
+          "search"
+        ],
+        "has_search_bar": true
+      },
+      "history": [],
+      "children": [
+        {
+          "action": {
+            "plan": "search for the product using the exact query to find relevant results",
+            "thought": "perform a search for 'noise cancelling cosycost usb microphone' to locate matching products",
+            "env": "search[noise cancelling cosycost usb microphone]",
+            "expl": "I performed a search for 'noise cancelling cosycost usb microphone' to find products matching the user's request for a noise-cancelling USB microphone from Cosycost under $50.00."
+          },
+          "stats": {
+            "N": 0,
+            "Q": 0.0,
+            "P": 0.3333333333333333,
+            "U": 0.39999999999999997,
+            "UCB": 0.39999999999999997,
+            "UCT": 0.0
+          }
+        },
+        {
+          "action": {
+            "plan": "search with a slightly broader term to find more options",
+            "thought": "try searching 'noise cancelling usb microphone' to expand results",
+            "env": "search[noise cancelling usb microphone]",
+            "expl": "I performed a search for 'noise cancelling usb microphone' to find more relevant options that meet the user's requirement of being under $50.00."
+          },
+          "stats": {
+            "N": 0,
+            "Q": 0.0,
+            "P": 0.3333333333333333,
+            "U": 0.39999999999999997,
+            "UCB": 0.39999999999999997,
+            "UCT": 0.0
+          }
+        },
+        {
+          "action": {
+            "plan": "search with a more generic term to cover all possible variations",
+            "thought": "search for 'cosycost usb microphone' to find the product regardless of noise cancellation mention",
+            "env": "search[cosycost usb microphone]",
+            "expl": "I searched for 'cosycost usb microphone' to find relevant products, as the exact noise-cancelling feature was not specified, and the search aimed to cover all possible variations within the price limit of $50.00."
+          },
+          "stats": {
+            "N": 0,
+            "Q": 0.0,
+            "P": 0.3333333333333333,
+            "U": 0.39999999999999997,
+            "UCB": 0.39999999999999997,
+            "UCT": 0.0
+          }
+        }
+      ]
+    },
+    {
+      "state": {
+        "url": "http://127.0.0.1:3000/sim_bnkbvwjukf",
+        "observation": "WebShop [SEP] Instruction: [SEP] i want a noise cancelling cosycost usb microphone, and price lower than 50.00 dollars [SEP] Search"
+      },
+      "actions_available": {
+        "clickables": [
+          "search"
+        ],
+        "has_search_bar": true
+      },
+      "history": [],
+      "children": [
+        {
+          "action": {
+            "plan": "search for the product using the exact query to find relevant results",
+            "thought": "perform a search for 'noise cancelling cosycost usb microphone' to locate matching products",
+            "env": "search[noise cancelling cosycost usb microphone]",
+            "expl": "I performed a search for 'noise cancelling cosycost usb microphone' to find products matching the user's request for a noise-cancelling USB microphone from Cosycost under $50.00."
+          },
+          "stats": {
+            "N": 0,
+            "Q": 0.0,
+            "P": 0.3333333333333333,
+            "U": 0.39999999999999997,
+            "UCB": 0.39999999999999997,
+            "UCT": 0.0
+          }
+        },
+        {
+          "action": {
+            "plan": "search with a slightly broader term to find more options",
+            "thought": "try searching 'noise cancelling usb microphone' to expand results",
+            "env": "search[noise cancelling usb microphone]",
+            "expl": "I performed a search for 'noise cancelling usb microphone' to find more relevant options that meet the user's requirement of being under $50.00."
+          },
+          "stats": {
+            "N": 0,
+            "Q": 0.0,
+            "P": 0.3333333333333333,
+            "U": 0.39999999999999997,
+            "UCB": 0.39999999999999997,
+            "UCT": 0.0
+          }
+        },
+        {
+          "action": {
+            "plan": "search with a more generic term to cover all possible variations",
+            "thought": "search for 'cosycost usb microphone' to find the product regardless of noise cancellation mention",
+            "env": "search[cosycost usb microphone]",
+            "expl": "I searched for 'cosycost usb microphone' to find relevant products, as the exact noise-cancelling feature was not specified, and the search aimed to cover all possible variations within the price limit of $50.00."
+          },
+          "stats": {
+            "N": 0,
+            "Q": 0.0,
+            "P": 0.3333333333333333,
+            "U": 0.39999999999999997,
+            "UCB": 0.39999999999999997,
+            "UCT": 0.0
+          }
+        }
+      ]
+    },
+    {
+      "state": {
+        "url": "http://127.0.0.1:3000/search_results/sim_dchinhhxem/noise+cancelling+cosycost+usb+microphone/1",
+        "observation": "Instruction: [SEP] i want a noise cancelling cosycost usb microphone, and price lower than 50.00 dollars [SEP] Back to Search [SEP] Page 1 (Total results: 50) [SEP] Next > [SEP] B0972Q1T8T [SEP] Cosycost USB Microphone,Condenser Computer PC Gaming Microphone for PS4/5 Laptop Windows Mac OS Android Phone,Noise Cancelling Instant Mute,Studio Mic for Voice,Music Recording,Podcasting,Streaming [SEP] $32.99 [SEP] B072L2D6LY [SEP] Andrea Communications NC-255VM USB On-Ear Stereo USB Computer Headset with Noise-Canceling Microphone, in-Line Volume/Mute Controls, and Plug [SEP] $34.59 [SEP] B071H84LTJ [SEP] Andrea Communications NC-455VM USB Over-Ear Circumaural Stereo USB Computer Headset with Noise-Canceling Microphone, in-Line Volume/Mute Controls, and Plug [SEP] $49.24 [SEP] B08GLJSWJ9 [SEP] Jiade USB Headset with Noise Canceling Microphone for CallCenter Skype Chat, Computer Phone Headset Voice Recognition Speech Dictation, PC Headphone with Mic Mute Volume Control Binaural Golden [SEP] $9.99 [SEP] B09M75DDSV [SEP] Yealink Headset with Microphone Teams Certified UH36& WH66 USB-C and Wireless Bluetooth DECT Headphones with Microphone Noise Cancelling Teams Certified Workstation for VoIP Phone Computer PC Laptop [SEP] $331.99 [SEP] B08SGMQYS4 [SEP] EKSA Headset with Microphone for Laptop, Wired USB Computer Headphones with Environmental Noise Cancellation, Lightweight Mute Control, Business Telephone Headset for PC,Skype, Call Center, Office [SEP] $29.95 [SEP] B01M7SHQNO [SEP] USB Headset with Microphone Noise Cancelling & Mic Mute, Mono Computer Headphone for Call Center Office Business PC Softphone Calls Microsoft Teams Skype Chat, Clear Voice for Speech Dictation [SEP] $36.99 [SEP] B08FMK8XV5 [SEP] USB Headset with Microphone Computer Headphone with Noise Cancelling, Corded Monaural H390 Headset Computer Pro Headphones for Business Skype UC Lync Softphone Call Center Office [SEP] $16.75 [SEP] B09KZN3G83 [SEP] USB Headset with Microphone Noise Cancelling for Call Center, Adjustable Boom Mic, Inline Volume Control & Mute, Wired On Ear Computer PC Headphones for Zoom, Web, Skype [SEP] $19.99 [SEP] B085M2ZQ35 [SEP] Lenovo Yoga Active Noise Cancellation Headphones, Wireless On-Ear Headphones, Bluetooth 5.0, 14Hrs Playtime, Microphone, Fold-Flat, Memory Foam Earpads, Carry Case, Win/Mac/Android, GXD0U47643, Mica [SEP] $149.99"
+      },
+      "actions_available": {
+        "clickables": [
+          "b01m7shqno",
+          "b071h84ltj",
+          "b072l2d6ly",
+          "b085m2zq35",
+          "b08fmk8xv5",
+          "b08gljswj9",
+          "b08sgmqys4",
+          "b0972q1t8t",
+          "b09kzn3g83",
+          "b09m75ddsv",
+          "back to search",
+          "next >"
+        ],
+        "has_search_bar": false
+      },
+      "history": [
+        {
+          "plan": "search for the product using the exact query to find relevant results",
+          "thought": "perform a search for 'noise cancelling cosycost usb microphone' to locate matching products",
+          "env": "search[noise cancelling cosycost usb microphone]",
+          "expl": "I performed a search for 'noise cancelling cosycost usb microphone' to find products matching the user's request for a noise-cancelling USB microphone from Cosycost under $50.00."
+        }
+      ],
+      "children": [
+        {
+          "action": {
+            "plan": "evaluate the products listed, select the one that matches 'noise cancelling cosycost usb microphone' and is under $50.00, then click buy now",
+            "thought": "B0972Q1T8T matches the product name and is within price limit",
+            "env": "click[b0972q1t8t]",
+            "expl": "I clicked the Cosycost USB microphone because it matched the user's request for a noise-cancelling, USB-powered microphone under $50.00."
+          },
+          "stats": {
+            "N": 0,
+            "Q": 0.0,
+            "P": 0.3333333333333333,
+            "U": 0.39999999999999997,
+            "UCB": 0.39999999999999997,
+            "UCT": 0.0
+          }
+        },
+        {
+          "action": {
+            "plan": "check alternative products that closely match the description and ensure price is under $50.00 before buying",
+            "thought": "B08FMK8XV5 is a close match with noise cancellation and is under $50.00",
+            "env": "click[b08fmk8xv5]",
+            "expl": "I clicked on the B08FMK8XV5 USB headset with noise cancellation as it matched the user's request for a noise-cancelling microphone under $50.00."
+          },
+          "stats": {
+            "N": 0,
+            "Q": 0.0,
+            "P": 0.3333333333333333,
+            "U": 0.39999999999999997,
+            "UCB": 0.39999999999999997,
+            "UCT": 0.0
+          }
+        },
+        {
+          "action": {
+            "plan": "verify the product details and proceed to buy the correct one that fits all requirements",
+            "thought": "B08GLJSWJ9 is a noise-cancelling USB headset with mic and is under $50.00, suitable option",
+            "env": "click[b08gljswj9]",
+            "expl": "I clicked on the Jiade USB headset with noise-cancelling microphone because it meets the user's requirement of being a noise-cancelling USB device under $50.00."
+          },
+          "stats": {
+            "N": 0,
+            "Q": 0.0,
+            "P": 0.3333333333333333,
+            "U": 0.39999999999999997,
+            "UCB": 0.39999999999999997,
+            "UCT": 0.0
+          }
+        }
+      ]
+    },
+    {
+      "state": {
+        "url": "http://127.0.0.1:3000/item_page/sim_ueblinhwtp/B0972Q1T8T/noise+cancelling+cosycost+usb+microphone/1/{}",
+        "observation": "Instruction: [SEP] i want a noise cancelling cosycost usb microphone, and price lower than 50.00 dollars [SEP] Back to Search [SEP] < Prev [SEP] Cosycost USB Microphone,Condenser Computer PC Gaming Microphone for PS4/5 Laptop Windows Mac OS Android Phone,Noise Cancelling Instant Mute,Studio Mic for Voice,Music Recording,Podcasting,Streaming [SEP] Price: $32.99 [SEP] Rating: N.A. [SEP] Description [SEP] Features [SEP] Reviews [SEP] Buy Now"
+      },
+      "actions_available": {
+        "clickables": [
+          "< prev",
+          "back to search",
+          "buy now",
+          "description",
+          "features",
+          "reviews"
+        ],
+        "has_search_bar": false
+      },
+      "history": [
+        {
+          "plan": "search for the product using the exact query to find relevant results",
+          "thought": "perform a search for 'noise cancelling cosycost usb microphone' to locate matching products",
+          "env": "search[noise cancelling cosycost usb microphone]",
+          "expl": "I performed a search for 'noise cancelling cosycost usb microphone' to find products matching the user's request for a noise-cancelling USB microphone from Cosycost under $50.00."
+        },
+        {
+          "plan": "evaluate the products listed, select the one that matches 'noise cancelling cosycost usb microphone' and is under $50.00, then click buy now",
+          "thought": "B0972Q1T8T matches the product name and is within price limit",
+          "env": "click[b0972q1t8t]",
+          "expl": "I clicked the Cosycost USB microphone because it matched the user's request for a noise-cancelling, USB-powered microphone under $50.00."
+        }
+      ],
+      "children": [
+        {
+          "action": {
+            "plan": "confirm the product matches the query and is within price limit, then proceed to buy",
+            "thought": "The product is a noise cancelling Cosycost USB microphone at $32.99, which meets all requirements",
+            "env": "click[buy now]",
+            "expl": "I clicked 'Buy Now' for the noise cancelling Cosycost USB microphone priced at $32.99, which satisfies the user's requirement of being under $50 and matching the product specifications."
+          },
+          "stats": {
+            "N": 0,
+            "Q": 0.0,
+            "P": 0.3333333333333333,
+            "U": 0.39999999999999997,
+            "UCB": 0.39999999999999997,
+            "UCT": 0.0
+          }
+        },
+        {
+          "action": {
+            "plan": "verify product details and ensure it's the correct variant before purchasing",
+            "thought": "Product description confirms it's a noise cancelling USB microphone, so it's safe to buy",
+            "env": "click[description]",
+            "expl": "I clicked on the product description to verify it matches the requested noise cancelling USB microphone under $50, ensuring it meets the user's specifications before proceeding with the purchase."
+          },
+          "stats": {
+            "N": 0,
+            "Q": 0.0,
+            "P": 0.3333333333333333,
+            "U": 0.39999999999999997,
+            "UCB": 0.39999999999999997,
+            "UCT": 0.0
+          }
+        },
+        {
+          "action": {
+            "plan": "go back to search and look for alternative products if needed, then select and buy",
+            "thought": "To ensure no better option exists, check previous results",
+            "env": "click[< prev]",
+            "expl": "I clicked back to previous page to check for alternative noise-cancelling USB microphones under $50, as the initial result was specific to Cosycost and I wanted to ensure no better option existed."
+          },
+          "stats": {
+            "N": 0,
+            "Q": 0.0,
+            "P": 0.3333333333333333,
+            "U": 0.39999999999999997,
+            "UCB": 0.39999999999999997,
+            "UCT": 0.0
+          }
+        }
+      ]
+    }
+  ]
+}
